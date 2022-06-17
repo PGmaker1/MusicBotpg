@@ -784,7 +784,7 @@ class MusicBot(discord.Client):
     async def update_now_playing_status(self, entry=None, is_paused=False):
         game = None
 
-        if not self.config.status_message:
+        if self.config.status_message:
             if self.user.bot:
                 activeplayers = sum(1 for p in self.players.values() if p.is_playing)
                 if activeplayers > 1:
@@ -802,8 +802,8 @@ class MusicBot(discord.Client):
 
                 name = u"{}{}".format(prefix, entry.title)[:128]
                 game = discord.Game(type=0, name=name)
-        else:
-            game = discord.Game(type=0, name=self.config.status_message.strip()[:128])
+            else:
+                game = discord.Game(type=0, name='ANO遊戲社群')
 
         async with self.aiolocks[_func_()]:
             if game != self.last_status:
@@ -1351,13 +1351,13 @@ class MusicBot(discord.Client):
     def _gen_embed(self):
         """Provides a basic template for embeds"""
         e = discord.Embed()
-        e.colour = 7506394
+        e.colour = 6506394
         e.set_footer(
-            text=self.config.footer_text, icon_url="https://i.imgur.com/gFHBoZA.png"
+            text=self.config.footer_text, icon_url="https://cdn.discordapp.com/attachments/926271057986482277/983564181108293682/c33e56442f8f91a8.gif"
         )
         e.set_author(
             name=self.user.name,
-            url="https://github.com/Just-Some-Bots/MusicBot",
+            url="https://github.com/Just-Some-Bots/MusicBot", #暫時
             icon_url=self.user.avatar_url,
         )
         return e
@@ -1712,7 +1712,6 @@ class MusicBot(discord.Client):
             await self.safe_send_message(
                 channel,
                 content,
-                expire_in=response.delete_after if self.config.delete_messages else 0,
             )
             player = self.get_player_in(channel.guild)
 
@@ -2324,7 +2323,6 @@ class MusicBot(discord.Client):
             await self.safe_send_message(
                 channel,
                 content,
-                expire_in=response.delete_after if self.config.delete_messages else 0,
             )
             player = self.get_player_in(channel.guild)
 
